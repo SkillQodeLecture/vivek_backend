@@ -1,3 +1,5 @@
+/*
+
 import express from 'express'
 
 const app = express()
@@ -37,4 +39,31 @@ app.get('/api/jokes' , (req , res) => {
 app.listen(port , (error) => {
     error ? console.log('Server not start'):console.log(`Server start on port ${port}`);
 })
+
+*/
+
+/*
+import express from 'express';
+const app = express()
+
+;(async() => {
+    try{
+      await  mongoose.connect(`${process.env.MONGODB_URI}/${YOUTUBE}`)
+      app.on('error' , () => {
+        console.log("error db" , error)
+        throw error
+      })
+      app.listen(process.env.PORT , (error) => {
+        console.log(`App is listening port ${process.env.PORT}`);
+        
+      })
+    }
+    catch(error){
+        console.log(error);
+        throw error
+        
+    }
+})()
+
+*/
 

@@ -1,34 +1,18 @@
-import mongoose from 'mongoose';
 import connectDB from './db/db.js';
 import dotenv from 'dotenv';
+import app from './app.js';
 
 dotenv.config({
     path:'./env'
 })
 
-connectDB();
+connectDB()
+.then(() => {
+    app.listen(process.env.PORT || 9000 , (error) => {
+        console.log(`server is running port ${process.env.PORT}`);  
+    })
+})
+.catch((error) => {
+    console.log('MongoDB connection failed' , error);  
+})
 
-/*
-import express from 'express';
-const app = express()
-
-;(async() => {
-    try{
-      await  mongoose.connect(`${process.env.MONGODB_URI}/${YOUTUBE}`)
-      app.on('error' , () => {
-        console.log("error db" , error)
-        throw error
-      })
-      app.listen(process.env.PORT , (error) => {
-        console.log(`App is listening port ${process.env.PORT}`);
-        
-      })
-    }
-    catch(error){
-        console.log(error);
-        throw error
-        
-    }
-})()
-
-*/
