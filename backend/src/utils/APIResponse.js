@@ -7,4 +7,4 @@ class APIResponse extends Response {
     }
 }
 
-export {APIResponse}
+export { APIResponse }
