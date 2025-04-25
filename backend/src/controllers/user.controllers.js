@@ -7,9 +7,12 @@ import { APIResponse } from "../utils/APIResponse.js";
 const generateAccessAndRefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId)
+        if (!user) {
+            throw new Error("User not found!");
+        }
         const accessToken = user.generateAccessToken()
         const refreshToken = user.generateRefreshToken()
-        user.refreshToken(refreshToken)
+        user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false })
 
         return { accessToken, refreshToken }
@@ -125,9 +128,13 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new APIError(404, "User Does Not Exist!!")
     }
 
-    const isPosswordValid = await user.methods.isPasswordCorrect(password)
+    const isPasswordValid = await user.isPasswordCorrect(password)
 
-    if (!isPosswordValid) {
+    console.log("user:", user);
+    console.log("user.isPasswordCorrect:", user?.isPasswordCorrect);
+
+
+    if (!isPasswordValid) {
         throw new APIError(400, "password is invalid!!")
     }
 
@@ -162,15 +169,15 @@ const logoutUser = asyncHandler(async (req, res) => {
     )
 
     const options = {
-        httpOnly:true,
-        secure:true
+        httpOnly: true,
+        secure: true
     }
 
     return res
-    .status(200)
-    .clearCookie("accessToken" , options)
-    .clearCookie("refreshToken" , options)
-    .json(new APIError(200 , {} , "user logged out!"))
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new APIError(200, {}, "user logged out!"))
 })
 
 export default registerUser
